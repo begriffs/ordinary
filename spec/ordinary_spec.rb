@@ -55,6 +55,25 @@ describe Ordinary do
         (Ord.Omega <=> @two).should == 1
         (Ord.Omega <=> Ord.Omega) == 0
       end
+
+      it 'adds past omega' do
+        (Ord.Omega + Ord.Omega).should > Ord.Omega
+      end
+
+      it 'adds past omega plus 1' do
+        (Ord.Omega + Ord.Omega).should > (Ord.Omega + 1)
+      end
+
+      it 'adding omega to 1 does not count' do
+        (1 + Ord.Omega).should == Ord.Omega
+      end
+      it 'adding one to omega counts' do
+        (Ord.Omega + 1).should > Ord.Omega
+      end
+
+      it 'is associative' do
+        (Ord.Omega + (Ord.Omega + 1)).should == ((Ord.Omega + Ord.Omega) + 1)
+      end
     end
   end
 end

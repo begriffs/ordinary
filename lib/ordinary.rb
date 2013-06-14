@@ -4,11 +4,9 @@ module Ordinary
   class Ord
     attr_reader :value
 
-    def initialize(value)
+    def initialize value
       if value.is_a? Fixnum
         @value = [{coef: value, exp: 0}]
-      elsif value == :omega
-        @value = [{coef: 1, exp: 1}]
       elsif value.is_a? Array
         @value = value
       elsif value.is_a? Hash
@@ -21,14 +19,14 @@ module Ordinary
     end
 
     def self.Omega
-      Ord.new :omega
+      Ord.new [{coef: 1, exp: 1}]
     end
 
-    def +(other)
-      if other == Ord.Omega
-        return Ord.Omega
-      end
+    def + other
       other = Ord.new other
+      if other >> self
+        return other
+      end
       unmatched_theirs = other.value.clone
       unmatched_ours = @value.clone
       result = []
@@ -45,22 +43,51 @@ module Ordinary
       Ord.new(result.concat(unmatched_ours.concat unmatched_theirs))
     end
 
-    def <=>(other)
+    def <=> other
       other = Ord.new other
 
       ours_sorted = @value.sort &term_compare(:desc)
       theirs_sorted = other.value.sort &term_compare(:desc)
       ours_sorted.each do |term|
         return 1 if theirs_sorted.empty?
-        battle = term_compare.call term, theirs_sorted.first
+        battle = term_compare.call term, theirs_sorted.shift
         return battle if battle != 0
-        theirs_sorted.pop
       end
       return 0
     end
 
-    def ==(other)
+    # way less
+    def << other
+      highest_term[:exp] < other.highest_term[:exp]
+    end
+
+    # way more
+    def >> other
+      highest_term[:exp] > other.highest_term[:exp]
+    end
+
+    def == other
       (self <=> other) == 0
+    end
+
+    def > other
+      (self <=> other) == 1
+    end
+
+    def >= other
+      [1, 0].include? (self <=> other)
+    end
+
+    def < other
+      (self <=> other) == -1
+    end
+
+    def <= other
+      [-1, 0].include? (self <=> other)
+    end
+
+    def highest_term
+      @value.max_by { |x| x[:exp] }
     end
 
     private
@@ -80,7 +107,7 @@ module Ordinary
 
     def +(other)
       if other.is_a? Ord
-        other + self
+        Ord.new(self) + other
       else
         self.old_add other
       end
