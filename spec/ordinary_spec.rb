@@ -74,6 +74,10 @@ describe Ordinary do
       it 'is associative' do
         (Ord.Omega + (Ord.Omega + 1)).should == ((Ord.Omega + Ord.Omega) + 1)
       end
+
+      it 'accepts Float::Infinity' do
+        (Ord.new Float::INFINITY).should == Ord.Omega
+      end
     end
   end
 end

@@ -7,6 +7,8 @@ module Ordinary
     def initialize value
       if value.is_a? Fixnum
         @value = [{coef: value, exp: 0}]
+      elsif value == Float::INFINITY
+        @value = [{coef: 1, exp: 1}]
       elsif value.is_a? Array
         @value = value
       elsif value.is_a? Hash
