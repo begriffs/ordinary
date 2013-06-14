@@ -1,29 +1,17 @@
-# Ordinary
+## Ordinal Arithmetic in Ruby
 
-TODO: Write a gem description
+Finite numbers are small. You're bigger than that. Use this gem to count
+above the *ordinary*.
 
-## Installation
+```ruby
+require 'ordinary'
+include Ordinary
 
-Add this line to your application's Gemfile:
+infinity = Ord.Omega
 
-    gem 'ordinary'
+2 < infinity                    # => true
+infinity < infinity + 1         # => true
+infinity < infinity + infinity  # => true
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install ordinary
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+!!"You'll love this library"    # => true
+```
